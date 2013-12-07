@@ -26,7 +26,8 @@ class Mono2 < Formula
 
         resource('xsp').stage do
             system "./configure",
-                        "--prefix=#{prefix}"
+                        "--prefix=#{prefix}",
+                        "--mandir=#{man}"
             system "make"
             system "make install"
         end
