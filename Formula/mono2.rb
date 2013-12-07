@@ -25,7 +25,7 @@ class Mono2 < Formula
         system "make install"
 
         resource('xsp').stage do
-            system "./configure",
+            system "PKG_CONFIG_PATH=#{lib} ./configure",
                         "--prefix=#{prefix}",
                         "--mandir=#{man}"
             system "make"
