@@ -2,11 +2,15 @@
 
 require 'formula'
 
-class Mono3 < Formula
-    VER='3.2.5'
+class Mono < Formula
     homepage 'http://www.mono-project.com/'
-    url "http://download.mono-project.com/sources/mono/mono-#{VER}.tar.bz2"
-    sha1 '1cd0bc34835f6e2fa48e03178324ee92a9ca91cb'
+    url "http://download.mono-project.com/sources/mono/mono-2.11.3.tar.bz2"
+    sha1 'd5c56c12c8fbf8d838d11cf7cafff6e0f714164a'
+
+    devel do
+        url "http://download.mono-project.com/sources/mono/mono-3.2.5.tar.bz2"
+        sha1 '1cd0bc34835f6e2fa48e03178324ee92a9ca91cb'
+    end
 
     resource 'xsp' do
         url "http://download.mono-project.com/sources/xsp/xsp-2.10.2.tar.bz2"
@@ -21,20 +25,23 @@ class Mono3 < Formula
                     "--with-glib=embedded",
                     "--with-tls=pthread",
                     "--enable-nls=no"
-        system "make"
+        system "make -j7"
         system "make install"
 
         resource('xsp').stage do
-            system "PKG_CONFIG_PATH=#{lib} ./configure",
+            ENV["PATH"] = "#{bin}:#{ENV['PATH']}"
+            ENV["PKG_CONFIG"] = "#{HOMEBREW_PREFIX}/bin/pkg-config"
+            ENV["PKG_CONFIG_PATH"] = "#{lib}/pkgconfig"
+            system "./configure",
                         "--prefix=#{prefix}",
                         "--mandir=#{man}"
-            system "make"
+            system "make -j7"
             system "make install"
         end
     end
 
     test do
         system "#{bin}/mono --version"
+        system "#{bin}/xsp --version"
     end
-
 end
